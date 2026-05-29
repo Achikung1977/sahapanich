@@ -1,10 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ตรวจสอบห้องพบที่ปรึกษา</title>
+<title>ค้นหาห้องพบที่ปรึกษา</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,9 +20,9 @@
 }
 
 body{
+  min-height:100vh;
   background:
     linear-gradient(135deg,#0d47a1,#1565c0,#1976d2);
-  min-height:100vh;
   padding:20px;
 }
 
@@ -30,7 +31,9 @@ body{
   margin:auto;
 }
 
-/* ================= HEADER ================= */
+/* =========================
+   HEADER
+========================= */
 
 .header{
   background:rgba(255,255,255,0.12);
@@ -39,7 +42,7 @@ body{
   border-radius:32px;
   padding:35px 25px;
   text-align:center;
-  box-shadow:0 12px 30px rgba(0,0,0,0.15);
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
   margin-bottom:25px;
 }
 
@@ -49,31 +52,33 @@ body{
   object-fit:contain;
   background:white;
   border-radius:50%;
-  padding:12px;
+  padding:10px;
   margin-bottom:18px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.18);
+  box-shadow:0 5px 20px rgba(0,0,0,0.15);
 }
 
 .college-name{
   color:white;
-  font-size:20px;
+  font-size:22px;
   font-weight:500;
   line-height:1.7;
-  margin-bottom:15px;
+  margin-bottom:18px;
 }
 
 .highlight-title{
   display:inline-block;
   background:white;
   color:#0d47a1;
-  padding:12px 28px;
+  padding:14px 30px;
   border-radius:50px;
   font-size:34px;
   font-weight:700;
-  box-shadow:0 5px 15px rgba(0,0,0,0.15);
+  box-shadow:0 5px 15px rgba(0,0,0,0.12);
 }
 
-/* ================= SEARCH ================= */
+/* =========================
+   SEARCH
+========================= */
 
 .search-section{
   background:white;
@@ -85,30 +90,14 @@ body{
 
 .search-title{
   text-align:center;
-  font-size:22px;
-  font-weight:600;
   color:#0d47a1;
+  font-size:24px;
+  font-weight:600;
   margin-bottom:18px;
 }
 
 .search-box{
   position:relative;
-}
-
-.search-box input{
-  width:100%;
-  border:none;
-  outline:none;
-  background:#f5f7fb;
-  border-radius:20px;
-  padding:20px 20px 20px 65px;
-  font-size:18px;
-  transition:0.3s;
-}
-
-.search-box input:focus{
-  background:white;
-  box-shadow:0 0 0 4px rgba(25,118,210,0.15);
 }
 
 .search-icon{
@@ -119,12 +108,30 @@ body{
   font-size:24px;
 }
 
-/* ================= WELCOME ================= */
+.search-box input{
+  width:100%;
+  border:none;
+  outline:none;
+  background:#f4f7fb;
+  border-radius:20px;
+  padding:20px 20px 20px 60px;
+  font-size:18px;
+  transition:0.3s;
+}
+
+.search-box input:focus{
+  background:white;
+  box-shadow:0 0 0 4px rgba(25,118,210,0.15);
+}
+
+/* =========================
+   WELCOME
+========================= */
 
 .welcome-box{
   background:white;
   border-radius:28px;
-  padding:50px 25px;
+  padding:50px 20px;
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,0.12);
 }
@@ -141,7 +148,9 @@ body{
   line-height:1.8;
 }
 
-/* ================= RESULT ================= */
+/* =========================
+   RESULT CARD
+========================= */
 
 .result-card{
   background:white;
@@ -157,11 +166,11 @@ body{
 }
 
 .student-name{
+  color:#0d47a1;
   font-size:34px;
   font-weight:700;
-  color:#0d47a1;
-  margin-bottom:20px;
   line-height:1.5;
+  margin-bottom:20px;
 }
 
 .info-grid{
@@ -177,15 +186,15 @@ body{
 }
 
 .info-title{
-  font-size:14px;
   color:#777;
+  font-size:14px;
   margin-bottom:6px;
 }
 
 .info-value{
+  color:#222;
   font-size:22px;
   font-weight:600;
-  color:#222;
 }
 
 .room-section{
@@ -207,33 +216,37 @@ body{
   line-height:1;
 }
 
-/* ================= EMPTY ================= */
+/* =========================
+   EMPTY RESULT
+========================= */
 
 .no-data{
   background:white;
   border-radius:28px;
   padding:40px 20px;
   text-align:center;
-  color:#777;
+  color:#666;
   font-size:22px;
   box-shadow:0 10px 25px rgba(0,0,0,0.12);
 }
 
-/* ================= FOOTER ================= */
+/* =========================
+   FOOTER
+========================= */
 
 .footer{
   margin-top:30px;
-  text-align:center;
   background:rgba(255,255,255,0.12);
   backdrop-filter:blur(12px);
-  border-radius:25px;
+  border-radius:28px;
   padding:25px;
+  text-align:center;
   color:white;
   box-shadow:0 10px 25px rgba(0,0,0,0.12);
 }
 
 .footer h3{
-  font-size:24px;
+  font-size:26px;
   margin-bottom:10px;
 }
 
@@ -242,7 +255,9 @@ body{
   opacity:0.95;
 }
 
-/* ================= ANIMATION ================= */
+/* =========================
+   ANIMATION
+========================= */
 
 @keyframes fadeIn{
   from{
@@ -255,7 +270,9 @@ body{
   }
 }
 
-/* ================= MOBILE ================= */
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:768px){
 
@@ -287,7 +304,7 @@ body{
 
   .search-box input{
     font-size:16px;
-    padding:18px 18px 18px 58px;
+    padding:18px 18px 18px 55px;
   }
 
   .welcome-box{
@@ -345,7 +362,7 @@ body{
     >
 
     <div class="college-name">
-      วิทยาลัยเทคโนโลยี<br>สหะพาณิชย์บริหารธุรกิจ
+      วิทยาลัยเทคโนโลยีสหะพาณิชย์บริหารธุรกิจ
     </div>
 
     <div class="highlight-title">
@@ -359,7 +376,7 @@ body{
   <div class="search-section">
 
     <div class="search-title">
-      กรอกข้อมูลเพื่อค้นหา
+      ค้นหาข้อมูลนักศึกษา
     </div>
 
     <div class="search-box">
@@ -379,6 +396,19 @@ body{
   </div>
 
   <!-- WELCOME -->
+
+  <div id="welcomeBox" class="welcome-box">
+
+    <h2>
+      ยินดีต้อนรับ
+    </h2>
+
+    <p>
+      กรุณาค้นหาข้อมูลนักศึกษา<br>
+      เพื่อแสดงห้องพบที่ปรึกษา
+    </p>
+
+  </div>
 
   <!-- RESULT -->
 
@@ -402,6 +432,10 @@ body{
 
 <script>
 
+/* =========================
+   ใส่ URL Apps Script ของคุณ
+========================= */
+
 const API_URL =
 "https://script.google.com/macros/s/AKfycbztvZ1juJKSGN9-RVj2qzfMTC_wvhOfizanlTqG_M1eZ9m0SWAe7wUAyaJnankQcIkX/exec";
 
@@ -411,14 +445,23 @@ const welcomeBox = document.getElementById("welcomeBox");
 
 let students = [];
 
+/* =========================
+   โหลดข้อมูล
+========================= */
+
 async function loadData(){
 
   try{
 
     const response = await fetch(API_URL);
+
     students = await response.json();
 
+    console.log("โหลดข้อมูลสำเร็จ", students);
+
   }catch(error){
+
+    console.error(error);
 
     welcomeBox.innerHTML = `
       <div class="no-data">
@@ -426,11 +469,13 @@ async function loadData(){
       </div>
     `;
 
-    console.error(error);
-
   }
 
 }
+
+/* =========================
+   แสดงผล
+========================= */
 
 function showResults(data){
 
@@ -452,7 +497,7 @@ function showResults(data){
       <div class="result-top">
 
         <div class="student-name">
-          ${student.prefix}${student.firstname} ${student.lastname}
+          ${student.prefix || ""}${student.firstname || ""} ${student.lastname || ""}
         </div>
 
         <div class="info-grid">
@@ -462,7 +507,7 @@ function showResults(data){
               รหัสนักศึกษา
             </div>
             <div class="info-value">
-              ${student.studentId}
+              ${student.studentId || "-"}
             </div>
           </div>
 
@@ -471,7 +516,7 @@ function showResults(data){
               ชื่อเล่น
             </div>
             <div class="info-value">
-              ${student.nickname}
+              ${student.nickname || "-"}
             </div>
           </div>
 
@@ -480,7 +525,7 @@ function showResults(data){
               ระดับชั้น
             </div>
             <div class="info-value">
-              ${student.classLevel}
+              ${student.classLevel || "-"}
             </div>
           </div>
 
@@ -495,7 +540,7 @@ function showResults(data){
         </div>
 
         <div class="room-number">
-          ${student.room}
+          ${student.room || "-"}
         </div>
 
       </div>
@@ -506,35 +551,63 @@ function showResults(data){
 
 }
 
+/* =========================
+   ค้นหา
+========================= */
+
 searchInput.addEventListener("keyup", function(){
 
   const keyword = this.value.trim().toLowerCase();
 
+  // ยังไม่ค้นหา
   if(keyword === ""){
 
     resultsDiv.innerHTML = "";
-    welcomeBox.style.display = "block";
-    return;
 
+    welcomeBox.style.display = "block";
+
+    return;
   }
 
+  // ซ่อน welcome
   welcomeBox.style.display = "none";
 
-  const filtered = students.filter(student =>
+  const filtered = students.filter(student => {
 
-    student.studentId.toLowerCase().includes(keyword) ||
+    const studentId =
+      String(student.studentId || "").toLowerCase();
 
-    student.firstname.toLowerCase().includes(keyword) ||
+    const firstname =
+      String(student.firstname || "").toLowerCase();
 
-    student.lastname.toLowerCase().includes(keyword) ||
+    const lastname =
+      String(student.lastname || "").toLowerCase();
 
-    student.classLevel.toLowerCase().includes(keyword)
+    const nickname =
+      String(student.nickname || "").toLowerCase();
 
-  );
+    const classLevel =
+      String(student.classLevel || "").toLowerCase();
+
+    return (
+
+      studentId.includes(keyword) ||
+      firstname.includes(keyword) ||
+      lastname.includes(keyword) ||
+      nickname.includes(keyword) ||
+      classLevel.includes(keyword)
+
+    );
+
+  });
 
   showResults(filtered);
 
 });
+
+/* =========================
+   เริ่มโหลดข้อมูล
+========================= */
 
 loadData();
 
@@ -542,3 +615,4 @@ loadData();
 
 </body>
 </html>
+```
