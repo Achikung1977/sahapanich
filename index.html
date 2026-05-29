@@ -1,519 +1,280 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบตรวจสอบข้อมูลนักศึกษา</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Prompt) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body {
-            font-family: 'Prompt', sans-serif;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>ค้นหาห้องพบที่ปรึกษา</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Tahoma,sans-serif;
+}
+
+body{
+  background:#f4f7fb;
+  padding:20px;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.header h1{
+  color:#0d47a1;
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.header p{
+  color:#666;
+  font-size:18px;
+}
+
+.search-box{
+  margin-bottom:25px;
+}
+
+.search-box input{
+  width:100%;
+  padding:18px;
+  border:none;
+  border-radius:16px;
+  font-size:18px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.card{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 3px 15px rgba(0,0,0,0.08);
+}
+
+.student-name{
+  font-size:28px;
+  font-weight:bold;
+  color:#222;
+  margin-bottom:15px;
+}
+
+.info{
+  font-size:18px;
+  margin-bottom:10px;
+  color:#444;
+}
+
+.room-box{
+  margin-top:20px;
+  background:linear-gradient(135deg,#0d47a1,#1976d2);
+  color:white;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+}
+
+.room-title{
+  font-size:22px;
+  margin-bottom:10px;
+}
+
+.room-number{
+  font-size:72px;
+  font-weight:bold;
+}
+
+.loading,
+.no-data{
+  text-align:center;
+  padding:40px;
+  color:#777;
+  font-size:22px;
+}
+
+.footer{
+  text-align:center;
+  margin-top:40px;
+  color:#999;
+  font-size:14px;
+}
+
+@media(max-width:768px){
+
+  body{
+    padding:15px;
+  }
+
+  .header h1{
+    font-size:28px;
+  }
+
+  .search-box input{
+    font-size:16px;
+    padding:16px;
+  }
+
+  .student-name{
+    font-size:24px;
+  }
+
+  .info{
+    font-size:16px;
+  }
+
+  .room-number{
+    font-size:60px;
+  }
+
+}
+
+</style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col">
+<body>
 
-    <!-- ส่วนหัว (Header Section) -->
-    <header class="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-md mx-auto px-4 py-3.5 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <img src="https://saha.ac.th/wp-content/uploads/2020/07/logo-1-150x150.png" 
-                     alt="School Logo" 
-                     class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm"
-                     onerror="this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=100&auto=format&fit=crop&q=60'">
-                <div>
-                    <h1 class="text-base font-semibold leading-tight">ระบบตรวจสอบข้อมูล</h1>
-                    <p class="text-xs text-blue-100 font-light">วิทยาลัยเทคโนโลยีสหะพาณิชย์บริหารธุรกิจ</p>
-                </div>
-            </div>
-            <div class="bg-blue-500/30 p-2 rounded-full">
-                <i data-lucide="graduation-cap" class="w-5 h-5 text-yellow-300"></i>
-            </div>
-        </div>
-    </header>
+<div class="container">
 
-    <!-- คอนเทนเนอร์หลัก (ปรับแต่งเพื่อหน้าจอมือถือ) -->
-    <main class="flex-1 max-w-md w-full mx-auto px-4 py-6 pb-24">
-        
-        <!-- การ์ดค้นหารายชื่อ -->
-        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 mb-6 relative overflow-hidden">
-            <div class="absolute right-0 bottom-0 translate-x-4 translate-y-4 opacity-5 pointer-events-none">
-                <i data-lucide="search" class="w-40 h-40"></i>
-            </div>
-            <h2 class="text-lg font-semibold text-slate-800 flex items-center gap-2">
-                <span class="inline-block w-2.5 h-6 bg-blue-600 rounded-full"></span>
-                ค้นหารายชื่อนักศึกษา
-            </h2>
-            <p class="text-xs text-slate-500 mt-1">กรอกรหัสนักศึกษา หรือชื่อ-นามสกุล เพื่อค้นหาข้อมูลส่วนตัว ห้องเรียน และห้องพบที่ปรึกษา</p>
-            
-            <!-- ฟอร์มการค้นหา -->
-            <div class="mt-4 space-y-3">
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                        <i data-lucide="search" class="w-5 h-5"></i>
-                    </span>
-                    <input type="text" 
-                           id="searchInput" 
-                           placeholder="รหัสนักศึกษา หรือ ชื่อ-นามสกุล..." 
-                           class="w-full pl-10 pr-10 py-3 bg-slate-100 border border-transparent focus:border-blue-500 focus:bg-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all duration-200 placeholder:text-slate-400"
-                           onkeyup="handleSearchKeyUp(event)">
-                    <button id="clearSearchBtn" 
-                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 hidden"
-                            onclick="clearSearch()">
-                        <i data-lucide="x-circle" class="w-5 h-5"></i>
-                    </button>
-                </div>
-                
-                <button onclick="performSearch()" 
-                        class="w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white py-3.5 rounded-xl font-medium text-sm shadow-sm hover:shadow transition-all duration-150 flex items-center justify-center gap-2">
-                    <i data-lucide="search" class="w-4 h-4"></i>
-                    ค้นหาข้อมูล
-                </button>
-            </div>
-        </div>
+  <div class="header">
+    <h1>ค้นหาห้องพบที่ปรึกษา</h1>
+    <p>วิทยาลัยเทคโนโลยีสหะพาณิชย์บริหารธุรกิจ</p>
+  </div>
 
-        <!-- แจ้งเตือนสถานะเมื่อพบข้อผิดพลาดหรือกำลังดาวน์โหลดข้อมูล (ทำงานเบื้องหลัง) -->
-        <div id="statusMessage" class="hidden mb-4 p-3.5 rounded-xl text-xs border flex flex-col gap-1.5 transition-all duration-300"></div>
+  <div class="search-box">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="ค้นหา รหัสนักศึกษา / ชื่อ / นามสกุล / ระดับชั้น"
+    />
+  </div>
 
-        <!-- ผลลัพธ์การค้นหา -->
-        <div id="resultHeaderArea" class="hidden flex items-center justify-between mb-3 px-1">
-            <h3 id="resultHeader" class="text-sm font-semibold text-slate-600">
-                ผลการค้นหา (<span id="studentCount">0</span>)
-            </h3>
-            <span id="dataSourceBadge" class="text-[9px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium">
-                กำลังอัปเดต...
-            </span>
-        </div>
+  <div id="results">
+    <div class="loading">กำลังโหลดข้อมูล...</div>
+  </div>
 
-        <!-- รายละเอียดรายการแสดงผล -->
-        <div id="studentContainer" class="space-y-3">
-            
-            <!-- หน้าเริ่มต้นแบบที่ยังไม่มีการค้นหาข้อมูล (Initial Landing State) -->
-            <div id="initialState" class="bg-white rounded-2xl p-8 text-center border border-slate-100 shadow-sm">
-                <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i data-lucide="fingerprint" class="w-8 h-8 text-blue-500 animate-pulse"></i>
-                </div>
-                <h4 class="text-sm font-semibold text-slate-700">พร้อมบริการตรวจสอบข้อมูล</h4>
-                <p class="text-xs text-slate-500 mt-1.5 max-w-[260px] mx-auto leading-relaxed">กรุณากรอกรหัสนักศึกษา หรือชื่อ-นามสกุล ของท่านในช่องค้นหาด้านบน เพื่อเริ่มต้นตรวจดูข้อมูลห้องเรียนและห้องที่ปรึกษา</p>
-            </div>
+  <div class="footer">
+    รองรับการใช้งานบนมือถือ
+  </div>
 
-            <!-- โหลดโครงร่างสมมุติระหว่างรอค้นหา (Loader Skeleton) -->
-            <div id="skeletonLoader" class="hidden space-y-3">
-                <div class="bg-white p-4 rounded-xl shadow-sm animate-pulse border border-slate-100">
-                    <div class="flex items-center space-x-3">
-                        <div class="rounded-full bg-slate-200 h-10 w-10"></div>
-                        <div class="flex-1 space-y-2 py-1">
-                            <div class="h-4 bg-slate-200 rounded w-1/3"></div>
-                            <div class="h-3 bg-slate-200 rounded w-1/2"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+</div>
 
-            <!-- ไม่พบข้อมูล (Empty / Not Found State) -->
-            <div id="emptyState" class="hidden bg-white rounded-2xl p-8 text-center border border-slate-100 shadow-sm">
-                <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i data-lucide="alert-circle" class="w-8 h-8 text-amber-500"></i>
-                </div>
-                <h4 class="text-sm font-semibold text-slate-700">ไม่พบข้อมูลที่ค้นหา</h4>
-                <p class="text-xs text-slate-500 mt-1 max-w-[240px] mx-auto">กรุณาตรวจสอบความถูกต้องของรหัสหรือชื่อ-นามสกุล แล้วลองใหม่อีกครั้ง</p>
-            </div>
+<script>
 
-            <!-- การ์ดรายชื่อที่จะแสดงผลลัพธ์ (สอดคล้องตามรูป 01.jpg และ 77.jpg) -->
-            <div id="studentList" class="space-y-3"></div>
+const API_URL =
+"https://script.google.com/macros/s/AKfycbztvZ1juJKSGN9-RVj2qzfMTC_wvhOfizanlTqG_M1eZ9m0SWAe7wUAyaJnankQcIkX/exec";
+
+const searchInput = document.getElementById("searchInput");
+const resultsDiv = document.getElementById("results");
+
+let students = [];
+
+async function loadData(){
+
+  try{
+
+    const response = await fetch(API_URL);
+    students = await response.json();
+
+    showResults(students);
+
+  }catch(error){
+
+    resultsDiv.innerHTML = `
+      <div class="no-data">
+        ไม่สามารถโหลดข้อมูลได้
+      </div>
+    `;
+
+    console.error(error);
+  }
+}
+
+function showResults(data){
+
+  if(data.length === 0){
+
+    resultsDiv.innerHTML = `
+      <div class="no-data">
+        ไม่พบข้อมูล
+      </div>
+    `;
+
+    return;
+  }
+
+  resultsDiv.innerHTML = data.map(student => `
+
+    <div class="card">
+
+      <div class="student-name">
+        ${student.prefix}${student.firstname} ${student.lastname}
+      </div>
+
+      <div class="info">
+        <strong>รหัสนักศึกษา:</strong>
+        ${student.studentId}
+      </div>
+
+      <div class="info">
+        <strong>ชื่อเล่น:</strong>
+        ${student.nickname}
+      </div>
+
+      <div class="info">
+        <strong>ระดับชั้น:</strong>
+        ${student.classLevel}
+      </div>
+
+      <div class="room-box">
+
+        <div class="room-title">
+          ห้องพบที่ปรึกษา
         </div>
 
-    </main>
-
-    <!-- ป๊อปอัพแสดงผลข้อมูลนักศึกษาแบบสมบูรณ์เมื่อถูกเลือก (Student Detail Modal) -->
-    <div id="studentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl shadow-xl overflow-hidden transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300 max-h-[90vh] flex flex-col">
-            
-            <!-- ส่วนหัวป๊อปอัพ -->
-            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white px-5 py-4 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="user-check" class="w-5 h-5 text-yellow-300"></i>
-                    <span class="font-semibold text-sm">ข้อมูลนักศึกษารายบุคคล</span>
-                </div>
-                <button onclick="closeModal()" class="text-blue-100 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <!-- เนื้อหาป๊อปอัพ -->
-            <div class="p-6 overflow-y-auto space-y-5">
-                
-                <!-- ข้อมูลสำคัญด้านหน้า -->
-                <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <div id="modalGenderBadge" class="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold shadow-sm">
-                        <!-- 'น' หรือ 'นส' -->
-                    </div>
-                    <div>
-                        <div class="text-xs text-slate-400 font-medium" id="modalStudentId">รหัส: -</div>
-                        <h3 class="text-base font-bold text-slate-800" id="modalStudentName">-</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">ชื่อเล่น: <span id="modalNickname" class="font-semibold text-blue-600">-</span></p>
-                    </div>
-                </div>
-
-                <!-- กริดข้อมูลชั้นเรียนและห้องพบปรึกษา (ปรับปรุงให้แสดงเลขห้องที่ปรึกษาขนาดใหญ่ขึ้นและเป็นสีแดง) -->
-                <div class="grid grid-cols-2 gap-3">
-                    
-                    <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100/50">
-                        <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider block">ระดับชั้น</span>
-                        <div class="flex items-center gap-2 mt-1">
-                            <div class="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
-                                <i data-lucide="award" class="w-4 h-4"></i>
-                            </div>
-                            <span class="text-sm font-semibold text-slate-700" id="modalClassroom">-</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-rose-50/60 p-3 rounded-xl border border-rose-100">
-                        <span class="text-[10px] text-rose-500 uppercase font-bold tracking-wider block">ห้องพบที่ปรึกษา</span>
-                        <div class="flex items-center gap-2 mt-1">
-                            <div class="w-7 h-7 bg-rose-100 rounded-lg flex items-center justify-center text-rose-600 animate-pulse">
-                                <i data-lucide="door-open" class="w-4 h-4"></i>
-                            </div>
-                            <!-- อัปเกรดเป็นตัวหนาขนาดใหญ่ และใช้สีแดงเด่นชัด -->
-                            <span class="text-xl font-black text-red-800 tracking-wide" id="modalAdvisorRoom">-</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- ข้อแนะนำประกอบการใช้งาน -->
-                <div class="pt-2">
-                    <div class="text-[11px] text-slate-400 font-semibold mb-2 flex items-center gap-1">
-                        <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
-                        คำแนะนำ
-                    </div>
-                    <p class="text-xs text-slate-500 leading-relaxed bg-amber-50 border border-amber-100 p-3 rounded-xl">
-                        หากพบข้อมูลไม่ถูกต้อง หรือมีการเปลี่ยนแปลงข้อมูลการเรียน กรุณาติดต่อฝ่ายทะเบียนวิทยาลัยเทคโนโลยีสหะพาณิชย์บริหารธุรกิจ ทันที
-                    </p>
-                </div>
-            </div>
-
-            <!-- ปุ่มปิดด้านล่าง -->
-            <div class="p-4 bg-slate-50 border-t border-slate-100 flex gap-2">
-                <button onclick="closeModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 py-3 rounded-xl text-xs font-semibold transition-all">
-                    ปิดหน้าต่าง
-                </button>
-            </div>
+        <div class="room-number">
+          ${student.room}
         </div>
+
+      </div>
+
     </div>
 
-    <!-- แถบนำทางด้านล่างสไตล์มือถือ (Sticky Bottom Navigation) -->
-    <footer class="fixed bottom-0 inset-x-0 bg-white border-t border-slate-200/80 py-2.5 px-6 z-40 shadow-lg">
-        <div class="max-w-md mx-auto flex justify-around items-center text-slate-400">
-            <button onclick="resetSearchAndScroll()" class="flex flex-col items-center gap-1 text-blue-600 focus:outline-none transition-all">
-                <i data-lucide="home" class="w-5 h-5"></i>
-                <span class="text-[9px] font-medium">หน้าแรก</span>
-            </button>
-            <button onclick="focusSearch()" class="flex flex-col items-center gap-1 hover:text-slate-600 focus:outline-none transition-all">
-                <i data-lucide="search" class="w-5 h-5"></i>
-                <span class="text-[9px] font-medium">ค้นหา</span>
-            </button>
-            <a href="https://saha.ac.th" target="_blank" class="flex flex-col items-center gap-1 hover:text-slate-600 transition-all">
-                <i data-lucide="globe" class="w-5 h-5"></i>
-                <span class="text-[9px] font-medium">เว็บไซต์หลัก</span>
-            </a>
-        </div>
-    </footer>
+  `).join("");
 
-    <!-- ส่วนตรรกะสั่งการ (JavaScript) -->
-    <script>
-        // รายชื่อนักศึกษาจำลองจากรูปภาพ (Mock Data) สำหรับกรณีเชื่อมต่อไม่ได้หรือยังไม่ได้แชร์ Sheet เป็นสาธารณะ
-        const mockStudentData = [
-            { id: "38514", prefix: "นางสาว", firstname: "จันจิรา", lastname: "น้ำนิล", nickname: "เลม่อน", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38516", prefix: "นางสาว", firstname: "ดารินทร์", lastname: "ลิมบู", nickname: "พิ้งค์", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38529", prefix: "นาย", firstname: "รัฐกุล", lastname: "มหาลาภ", nickname: "กูเกิ้ล", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38549", prefix: "นางสาว", firstname: "ศรัยฉัตร", lastname: "ยืนยัง", nickname: "พลอย", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38555", prefix: "นางสาว", firstname: "มนัสวี", lastname: "เจริญพงษ์", nickname: "เฟียร์", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38561", prefix: "นางสาว", firstname: "กัณฐิกา", lastname: "ครจำนงค์", nickname: "ออทิส", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38564", prefix: "นางสาว", firstname: "วรรณภัทร", lastname: "เสคำพันธ์", nickname: "พลอย", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38565", prefix: "นางสาว", firstname: "วันทกานต์", lastname: "เสคำพันธ์", nickname: "หยก", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38568", prefix: "นางสาว", firstname: "ทิพย์ธารา", lastname: "ปัดชุมมี", nickname: "อุ้มอิ่ม", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38572", prefix: "นางสาว", firstname: "ณัฏฐนรี", lastname: "แกะพลอย", nickname: "คอนเฟิร์ม", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38573", prefix: "นางสาว", firstname: "กนกกร", lastname: "โพธิ์เกตุ", nickname: "บริ้งค์", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38590", prefix: "นางสาว", firstname: "สโรชา", lastname: "มีทอง", nickname: "หมวย", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38639", prefix: "นาย", firstname: "อานนท์", lastname: "นิวงศ์ศา", nickname: "ดรีม", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38659", prefix: "นางสาว", firstname: "ประกายกาญจน์", lastname: "มะลิอ่อง", nickname: "แตงกวา", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38703", prefix: "นางสาว", firstname: "กัญญณัฏฐ์", lastname: "ศรีจรัส", nickname: "นิต้า", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38719", prefix: "นางสาว", firstname: "ธัญภาพร", lastname: "ทับเงิน", nickname: "อุ้งอิ๊งค์", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38773", prefix: "นางสาว", firstname: "กัลยรัตน์", lastname: "สมดี", nickname: "กัน", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38790", prefix: "นางสาว", firstname: "นันท์นภัส", lastname: "บุญมาคาร", nickname: "นุ่ม", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38804", prefix: "นาย", firstname: "วันชัย", lastname: "แจ้งสว่าง", nickname: "โบ๊ท", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38873", prefix: "นางสาว", firstname: "ณัฐธิดา", lastname: "ศิริวัตร", nickname: "ขนุน", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38874", prefix: "นางสาว", firstname: "สุชัญญากัทป์", lastname: "สุขฤกษ์", nickname: "ปุ่น", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38891", prefix: "นาย", firstname: "พชรพล", lastname: "แสงโพธิ์แก้ว", nickname: "เก้า", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38913", prefix: "นาย", firstname: "ดนัยณัฐ", lastname: "สุรอด", nickname: "เพรช", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38932", prefix: "นางสาว", firstname: "นัทธิกา", lastname: "บุตรสืบสาย", nickname: "นัท", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38967", prefix: "นางสาว", firstname: "สุภานิชา", lastname: "ชุมประสงค์", nickname: "ขนมจีน", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "38980", prefix: "นาย", firstname: "ประวัน", lastname: "แก้วพวง", nickname: "ม่อน", grade: "ปวช.1/1", advisorRoom: "321" },
-            { id: "36668", prefix: "นางสาว", firstname: "ธนพร", lastname: "ห้วยแก้ว", nickname: "ข้าวฟ่าง", grade: "ปวช.1/2", advisorRoom: "322" },
-            { id: "38510", prefix: "นาย", firstname: "จามิกรณ์", lastname: "ชาวสาคร", nickname: "ปอโต้", grade: "ปวช.1/2", advisorRoom: "322" },
-            { id: "38517", prefix: "นางสาว", firstname: "ภาวินี", lastname: "พุมมา", nickname: "กรีน", grade: "ปวช.1/2", advisorRoom: "322" }
-        ];
+}
 
-        let activeStudentList = [...mockStudentData]; 
-        const sheetId = '1HG5C1BHNJ0K9VDPEz8E-ACDHwr-CBaHgiAh_0lBKUls';
-        let isSheetConnected = false;
+searchInput.addEventListener("keyup", function(){
 
-        // ดึงข้อมูล Google Sheets ทางเบื้องหลัง (Background Load)
-        async function fetchSheetData() {
-            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+  const keyword = this.value.toLowerCase();
 
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error("Network Response Error");
+  const filtered = students.filter(student =>
 
-                const text = await response.text();
-                const jsonText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
-                const data = JSON.parse(jsonText);
-                
-                const rows = data.table.rows;
-                if (!rows || rows.length === 0) throw new Error("No data rows");
+    student.studentId.toLowerCase().includes(keyword) ||
 
-                const students = [];
-                const startIdx = 1; // ข้ามแถวที่ 0 (Header ของคอลัมน์)
+    student.firstname.toLowerCase().includes(keyword) ||
 
-                for (let i = startIdx; i < rows.length; i++) {
-                    const row = rows[i].c;
-                    if (!row || !row[0]) continue; 
+    student.lastname.toLowerCase().includes(keyword) ||
 
-                    students.push({
-                        id: row[0] ? String(row[0].v || row[0].f || "").trim() : "",
-                        prefix: row[1] ? String(row[1].v || "").trim() : "",
-                        firstname: row[2] ? String(row[2].v || "").trim() : "",
-                        lastname: row[3] ? String(row[3].v || "").trim() : "",
-                        nickname: row[4] ? String(row[4].v || "").trim() : "-",
-                        grade: row[5] ? String(row[5].v || "").trim() : "",
-                        advisorRoom: row[6] ? String(row[6].v || row[6].f || "").trim() : ""
-                    });
-                }
+    student.classLevel.toLowerCase().includes(keyword)
 
-                if (students.length > 0) {
-                    activeStudentList = students;
-                    isSheetConnected = true;
-                    updateBadgeStatus(true);
-                }
-            } catch (error) {
-                console.warn("Failed to fetch from sheet, using mock data.", error);
-                isSheetConnected = false;
-                updateBadgeStatus(false);
-            }
-        }
+  );
 
-        // อัปเดตตราแสดงผลประเภทแหล่งข้อมูลการค้นหา
-        function updateBadgeStatus(connected) {
-            const badge = document.getElementById('dataSourceBadge');
-            if (connected) {
-                badge.innerText = "ข้อมูลออนไลน์จาก Google Sheet";
-                badge.className = "text-[9px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-medium";
-            } else {
-                badge.innerText = "ข้อมูลออฟไลน์สำรอง";
-                badge.className = "text-[9px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium";
-            }
-        }
+  showResults(filtered);
 
-        // แสดงผลข้อความแจ้งเตือนข้อผิดพลาด
-        function showStatus(msg, type) {
-            const el = document.getElementById('statusMessage');
-            el.classList.remove('hidden', 'bg-blue-50', 'text-blue-700', 'border-blue-100', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-100', 'bg-amber-50', 'text-amber-700', 'border-amber-100');
-            
-            el.innerHTML = `
-                <div class="flex items-start gap-2">
-                    <span class="mt-0.5"><i data-lucide="${type === 'success' ? 'check-circle' : (type === 'warning' ? 'alert-triangle' : 'info')}" class="w-4 h-4"></i></span>
-                    <span class="font-medium leading-normal">${msg}</span>
-                </div>
-            `;
-            
-            if (type === 'success') {
-                el.classList.add('bg-emerald-50', 'text-emerald-700', 'border', 'border-emerald-100');
-                setTimeout(() => el.classList.add('hidden'), 5000);
-            } else if (type === 'warning') {
-                el.classList.add('bg-amber-50', 'text-amber-700', 'border', 'border-amber-100');
-            } else {
-                el.classList.add('bg-blue-50', 'text-blue-700', 'border', 'border-blue-100');
-            }
-            el.classList.remove('hidden');
-            lucide.createIcons();
-        }
+});
 
-        // คำสั่งจัดการสถานะการรอโหลด
-        function showLoader() {
-            document.getElementById('skeletonLoader').classList.remove('hidden');
-            document.getElementById('studentList').classList.add('hidden');
-            document.getElementById('emptyState').classList.add('hidden');
-            document.getElementById('initialState').classList.add('hidden');
-        }
+loadData();
 
-        function hideLoader() {
-            document.getElementById('skeletonLoader').classList.add('hidden');
-            document.getElementById('studentList').classList.remove('hidden');
-        }
+</script>
 
-        // แสดงผลผลลัพธ์รายการตรวจสอบตามที่กรอก
-        function renderStudents(data) {
-            const listContainer = document.getElementById('studentList');
-            const countContainer = document.getElementById('studentCount');
-            const emptyState = document.getElementById('emptyState');
-            const resultHeaderArea = document.getElementById('resultHeaderArea');
-            
-            listContainer.innerHTML = '';
-            countContainer.innerText = data.length;
-            resultHeaderArea.classList.remove('hidden');
-
-            if (data.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            data.forEach(student => {
-                const card = document.createElement('div');
-                card.className = "bg-white p-4 rounded-xl shadow-sm border border-slate-100 hover:border-red-400 active:scale-[0.99] transition-all cursor-pointer flex items-center justify-between";
-                card.onclick = () => openStudentDetail(student);
-
-                const isFemale = student.prefix && student.prefix.includes("สาว");
-                const initial = student.prefix === "นาย" ? "นาย" : "น.ส.";
-                const bgAvatar = isFemale ? "bg-pink-100 text-pink-600" : "bg-blue-100 text-blue-600";
-
-                // ปรับขนาดและแต่งดีไซน์ห้องพบที่ปรึกษาในการ์ดรายชื่อให้ใหญ่ มีสีแดงชัดเจนตามบรีฟ
-                card.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full ${bgAvatar} flex items-center justify-center font-bold text-xs shrink-0">
-                            ${initial}
-                        </div>
-                        <div>
-                            <div class="text-[10px] text-slate-400 font-medium">รหัส: ${student.id}</div>
-                            <div class="text-sm font-semibold text-slate-800">${student.prefix}${student.firstname} ${student.lastname}</div>
-                            <div class="text-xs text-slate-500">ห้อง: <span class="font-medium text-slate-700">${student.grade}</span> | ชื่อเล่น: <span class="text-blue-600 font-medium">${student.nickname}</span></div>
-                        </div>
-                    </div>
-                    <div class="text-right shrink-0 ml-2">
-                        <div class="text-[10px] text-slate-400 font-medium">ห้องพบที่ปรึกษา</div>
-                        <span class="inline-block bg-rose-50 text-red-600 border border-rose-100 px-3 py-1 rounded-lg text-base font-black mt-1">
-                            ${student.advisorRoom}
-                        </span>
-                    </div>
-                `;
-                listContainer.appendChild(card);
-            });
-            
-            lucide.createIcons();
-        }
-
-        // คอยตรวจจับการป้อนข้อมูล
-        function handleSearchKeyUp(e) {
-            const query = e.target.value.trim();
-            const clearBtn = document.getElementById('clearSearchBtn');
-            if (query.length > 0) {
-                clearBtn.classList.remove('hidden');
-            } else {
-                clearBtn.classList.add('hidden');
-            }
-
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        }
-
-        // สั่งเคลียร์กล่องล้างการค้นหา
-        function clearSearch() {
-            const input = document.getElementById('searchInput');
-            input.value = '';
-            document.getElementById('clearSearchBtn').classList.add('hidden');
-            document.getElementById('studentList').innerHTML = '';
-            document.getElementById('resultHeaderArea').classList.add('hidden');
-            document.getElementById('emptyState').classList.add('hidden');
-            document.getElementById('initialState').classList.remove('hidden');
-        }
-
-        // ค้นหาข้อมูลอย่างมีประสิทธิภาพ
-        function performSearch() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            
-            if (!query) {
-                clearSearch();
-                return;
-            }
-
-            showLoader();
-            
-            setTimeout(() => {
-                const filtered = activeStudentList.filter(student => {
-                    const idMatch = student.id.toLowerCase().includes(query);
-                    const nameMatch = `${student.prefix}${student.firstname} ${student.lastname}`.toLowerCase().includes(query);
-                    const nicknameMatch = student.nickname.toLowerCase().includes(query);
-                    const gradeMatch = student.grade.toLowerCase().includes(query);
-                    return idMatch || nameMatch || nicknameMatch || gradeMatch;
-                });
-
-                hideLoader();
-                updateBadgeStatus(isSheetConnected);
-                renderStudents(filtered);
-            }, 300);
-        }
-
-        // ฟังก์ชันสั่งการทำงานของป๊อปอัพ (Modal Details)
-        function openStudentDetail(student) {
-            const isFemale = student.prefix && student.prefix.includes("สาว");
-            const genderText = student.prefix === "นาย" ? "น" : "นส";
-            const bgAvatar = isFemale ? "bg-pink-100 text-pink-600" : "bg-blue-100 text-blue-600";
-
-            document.getElementById('modalStudentId').innerText = `รหัสนักศึกษา: ${student.id}`;
-            document.getElementById('modalStudentName').innerText = `${student.prefix}${student.firstname} ${student.lastname}`;
-            document.getElementById('modalNickname').innerText = student.nickname;
-            document.getElementById('modalClassroom').innerText = student.grade;
-            document.getElementById('modalAdvisorRoom').innerText = `${student.advisorRoom}`;
-
-            const badge = document.getElementById('modalGenderBadge');
-            badge.className = `w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold shadow-sm ${bgAvatar}`;
-            badge.innerText = genderText;
-
-            const modal = document.getElementById('studentModal');
-            const modalContent = modal.querySelector('.transform');
-            
-            modal.classList.remove('pointer-events-none', 'opacity-0');
-            modalContent.classList.remove('translate-y-full', 'sm:scale-95');
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('studentModal');
-            const modalContent = modal.querySelector('.transform');
-            
-            modal.classList.add('pointer-events-none', 'opacity-0');
-            modalContent.classList.add('translate-y-full');
-            modalContent.classList.remove('sm:scale-100');
-        }
-
-        // ปุ่มควบคุมด้านล่าง (Bottom Actions)
-        function resetSearchAndScroll() {
-            clearSearch();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // เล็งเป้ากล่องค้นหาข้อมูล
-        function focusSearch() {
-            const input = document.getElementById('searchInput');
-            input.focus();
-            window.scrollTo({ top: input.offsetTop - 100, behavior: 'smooth' });
-        }
-
-        // เริ่มต้นการโหลดข้อมูลทันทีเมื่อเปิดหน้าเว็บบริการ
-        window.onload = function() {
-            lucide.createIcons();
-            fetchSheetData();
-        };
-    </script>
 </body>
 </html>
